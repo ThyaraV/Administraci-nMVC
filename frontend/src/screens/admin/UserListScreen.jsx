@@ -26,8 +26,7 @@ const UserListScreen = () => {
     return( <>
     
     <h1>Users</h1>
-    {loadingDelete & <Loader/>}
-
+    {loadingDelete && <Loader/>}
     {isLoading ? <Loader/> : error ? <Message variant='danger'>
         {error}
     </Message>:(
@@ -72,9 +71,7 @@ const UserListScreen = () => {
             </Table>
         </>
 
-    )}
-    
-    
+    )}  
     
     
     </>)
