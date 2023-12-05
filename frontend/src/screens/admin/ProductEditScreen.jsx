@@ -118,7 +118,7 @@ const ProductEditScreen = () => {
                     </Form.Group>
 
                     <Form.Group controlId='brand' className="my-2">
-                        <Form.Label>Brand</Form.Label>
+                        <Form.Label>Supplier</Form.Label>
                         <Form.Control
                         type='brand'
                         placeholder='Enter brand'
