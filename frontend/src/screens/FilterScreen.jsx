@@ -1,71 +1,46 @@
+// En tu archivo HomeScreen.jsx en React
+
 import React, { useState } from 'react';
+import { Row, Col } from 'react-bootstrap';
+import Product from '../components/Product.jsx';
+import Loader from '../components/Loader.jsx';
+import Message from '../components/message.jsx';
+import { useGetProductsQuery } from '../slices/productsApiSlice.js';
 
 const FilterScreen = () => {
-  // Estados para almacenar los valores de los campos
-  const [presupuesto, setPresupuesto] = useState('');
-  const [tipoEvento, setTipoEvento] = useState('');
-  const [servicios, setServicios] = useState([]);
+  const [inputBudget, setInputBudget] = useState('');
+  const [queryBudget, setQueryBudget] = useState('');
+  const { data: products, isLoading, error } = useGetProductsQuery(queryBudget);
 
-  // Manejar cambios en el campo de presupuesto
-  const handlePresupuestoChange = (e) => {
-    setPresupuesto(e.target.value);
-  };
-
-  // Manejar cambios en el campo de tipo de evento
-  const handleTipoEventoChange = (e) => {
-    setTipoEvento(e.target.value);
-  };
-
-  // Manejar cambios en el campo de servicios
-  const handleServiciosChange = (e) => {
-    const selectedOptions = Array.from(e.target.selectedOptions, (option) => option.value);
-    setServicios(selectedOptions);
-  };
-
-  // Manejar envío del formulario
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    // Aquí puedes hacer algo con los valores, como enviarlos a tu servidor
-    console.log('Presupuesto:', presupuesto);
-    console.log('Tipo de evento:', tipoEvento);
-    console.log('Servicios:', servicios);
-  };
+  const handleFilter = () => {
+      setQueryBudget(inputBudget); // Actualiza el presupuesto para la consulta
+  }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Presupuesto:
-        <input type="text" value={presupuesto} onChange={handlePresupuestoChange} />
-      </label>
+    <>
+        <input type="number" value={inputBudget} onChange={(e) => setInputBudget(e.target.value)} />
+        <button onClick={handleFilter}>Filtrar</button>
 
-      <label>
-        Tipo de Evento:
-        <select value={tipoEvento} onChange={handleTipoEventoChange}>
-          <option value="">Seleccionar</option>
-          <option value="fiesta">Fiesta</option>
-          <option value="boda">Boda</option>
-          <option value="graduacion">Graduación</option>
-          <option value="conferencia">Conferencia</option>
-        </select>
-      </label>
+        {isLoading ? (
+            <Loader />
+        ) : error ? (
+            <Message variant='danger'>
+                {error?.data?.message || error.error}
+            </Message>
+        ) : (
+            <>
+                <h1>Filter Events</h1>
+                <Row>
+                    {products.map((product) => (
+                        <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+                            <Product product={product} />
+                        </Col>
+                    ))}
+                </Row>
+            </>
+        )}
+    </>
+)
+}
 
-      <label>
-        Servicios:
-        <select multiple value={servicios} onChange={handleServiciosChange}>
-          <option value="catering">Catering</option>
-          <option value="decoracion">Decoración</option>
-          <option value="musica">Música</option>
-          <option value="fotografo">Fotógrafo</option>
-          <option value="carpas">Carpas</option>
-        </select>
-      </label>
-
-      <button type="submit">Enviar</button>
-    </form>
-  );
-};
-
-
-
-export default FilterScreen
+export default FilterScreen;

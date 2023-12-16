@@ -3,12 +3,18 @@ import { apiSlice } from "./apiSlice.js";
 
 export const productsApiSlice=apiSlice.injectEndpoints({
     endpoints:(builder)=>({
-        getProducts:builder.query({
-            query:()=>({
-                url:PRODUCTS_URL,
-            }),
-                providesTags:['Product'],
-                keepUnusedDataFor:5
+        getProducts: builder.query({
+            query: (budget) => {
+                let queryParams = '';
+                if (budget) {
+                    queryParams = `?budget=${budget}`;
+                }
+                return {
+                    url: `${PRODUCTS_URL}${queryParams}`,
+                };
+            },
+            providesTags: ['Product'],
+            keepUnusedDataFor: 5
         }),
         getProductsDetails:builder.query({
             query:(productId)=>({

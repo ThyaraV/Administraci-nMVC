@@ -5,10 +5,23 @@ import Product from '../models/productModel.js';
 //@desc Fetch all products
 //@route GET/api/products
 //@access Public
-const getProducts=asyncHandler(async(req,res)=>{
+/*const getProducts=asyncHandler(async(req,res)=>{
     const products = await Product.find({});
     res.json(products);
+});*/
+const getProducts = asyncHandler(async (req, res) => {
+    const budget = req.query.budget;
+
+    let query = {};
+
+    if (budget) {
+        query.price = { $lte: budget };
+    }
+
+    const products = await Product.find(query);
+    res.json(products);
 });
+
 
 //@desc Create a product
 //@route POST/api/products
