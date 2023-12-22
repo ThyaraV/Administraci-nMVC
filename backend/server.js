@@ -12,12 +12,14 @@ import uploadRoutes from './routes/uploadRoutes.js';
 
 const port=process.env.PORT || 5000;
 
+const cors=require('cors');
+
 connectDB();
 
 const app=express();
 
 //Body parser middleware
-
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
