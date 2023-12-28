@@ -1,17 +1,17 @@
 import express  from "express";
 const router= express.Router();
 import asyncHandler from '../middleware/asyncHandler.js';
-import Service from '../models/servicesModel.js'
+import Supplier from '../models/supplierModel.js'
 
 router.get('/',asyncHandler(async(req,res)=>{
-    const services= await Service.find({});
-    res.json(services);
+    const suppliers= await Supplier.find({});
+    res.json(suppliers);
 }));
 
 router.get('/:id',asyncHandler(async(req,res)=>{
-    const service= await Service.findById(req.params.id);
-    if(service){
-        res.json(service);
+    const supplier= await Supplier.findById(req.params.id);
+    if(supplier){
+        res.json(supplier);
     }
 
     res.status(404).json({message:'Product not found'})

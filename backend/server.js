@@ -9,6 +9,8 @@ import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import serviceRoutes from './routes/serviceRoutes.js';
+import supplierTypeRoutes from './routes/supplierTypeRoutes.js';
+import supplierRoutes from './routes/supplierRoutes.js';
 
 const port=process.env.PORT || 5000;
 
@@ -32,6 +34,8 @@ app.get('/',(req,res)=>{
 
 app.use('/api/products',productRoutes);
 app.use('/api/services', serviceRoutes);
+app.use('/api/supplierTypes', supplierTypeRoutes);
+app.use('/api/suppliers', supplierRoutes);
 app.use('/api/users',userRoutes);
 app.use('/api/upload',uploadRoutes);
 
