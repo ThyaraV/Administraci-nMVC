@@ -1,20 +1,8 @@
 import express  from "express";
 const router= express.Router();
-import asyncHandler from '../middleware/asyncHandler.js';
-import SupplierType from '../models/supplierTypeModel.js'
+import { getSupplierTypes,getSupplierTypeById } from "../controllers/supplierTypeController.js";
 
-router.get('/',asyncHandler(async(req,res)=>{
-    const supplierTypes= await SupplierType.find({});
-    res.json(supplierTypes);
-}));
-
-router.get('/:id',asyncHandler(async(req,res)=>{
-    const supplierType= await SupplierType.findById(req.params.id);
-    if(supplierType){
-        res.json(supplierType);
-    }
-
-    res.status(404).json({message:'Product not found'})
-}));
+router.route('/').get(getSupplierTypes);
+router.route('/:id').get(getSupplierTypeById);
 
 export default router;
