@@ -6,9 +6,9 @@ const supplierSchema = new mongoose.Schema({
         required:true,
         ref:"User",
     },
-    serviceType: {
+    supplierType: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true,
+        required: false,
         ref:"SupplierType", // Referencia al modelo de tipo de proveedor
     },
     name: {

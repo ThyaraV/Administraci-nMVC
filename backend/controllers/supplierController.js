@@ -5,7 +5,7 @@ import Supplier from '../models/supplierModel.js';
 //@route GET /api/suppliers
 //@access Public
 const getSuppliers = asyncHandler(async (req, res) => {
-    const suppliers = await Supplier.find({}).populate('serviceType', 'category');
+    const suppliers = await Supplier.find({}).populate('supplierType');
     res.json(suppliers);
 });
 
@@ -31,8 +31,7 @@ const createSupplier = asyncHandler(async (req, res) => {
 //@route GET /api/suppliers/:id
 //@access Public
 const getSupplierById = asyncHandler(async (req, res) => {
-    const supplier = await Supplier.findById(req.params.id).populate('serviceType', 'category');
-
+    const supplier = await Supplier.findById(req.params.id);
     if (supplier) {
         res.json(supplier);
     } else {
@@ -45,11 +44,11 @@ const getSupplierById = asyncHandler(async (req, res) => {
 //@route PUT /api/suppliers/:id
 //@access Private/Admin
 const updateSupplier = asyncHandler(async (req, res) => {
-    const { serviceType, name, image, priceRange, ratings, description } = req.body;
+    const { supplierType, name, image, priceRange, ratings, description } = req.body;
     const supplier = await Supplier.findById(req.params.id);
 
     if (supplier) {
-        supplier.serviceType = serviceType || supplier.serviceType;
+        supplier.supplierType = supplierType !== undefined ? supplierType : product.supplierType;
         supplier.name = name || supplier.name;
         supplier.image = image || supplier.image;
         supplier.priceRange = priceRange || supplier.priceRange;

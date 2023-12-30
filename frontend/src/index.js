@@ -30,6 +30,9 @@ import ServiceListScreen from './screens/admin/serviceListScreen';
 import SupplierTypesListScreen from './screens/admin/supplierTypesListScreen';
 import ServiceEditScreen from './screens/admin/serviceEditScreen';
 import SupplierTypesEditScreen from './screens/admin/supplierTypesEditScreen';
+import SupplierListScreen from './screens/admin/supplierListScreen';
+import SupplierEditScreen from './screens/admin/supplierEditScreen';
+
 
 const router=createBrowserRouter(
   createRoutesFromElements(
@@ -53,6 +56,8 @@ const router=createBrowserRouter(
           <Route path="/admin/suppliertypelist" element={<SupplierTypesListScreen/>}/>
           <Route path="/admin/service/:id/edit" element={<ServiceEditScreen/>}/>
           <Route path="/admin/supplierType/:id/edit" element={<SupplierTypesEditScreen/>}/>
+          <Route path="/admin/supplierlist" element={<SupplierListScreen/>}/>
+          <Route path="/admin/supplier/:id/edit" element={<SupplierEditScreen/>}/>
 
         </Route>
        
