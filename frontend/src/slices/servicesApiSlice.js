@@ -17,10 +17,9 @@ export const servicesApiSlice = apiSlice.injectEndpoints({
             keepUnusedDataFor: 5,
         }),
         createService: builder.mutation({
-            query: (data) => ({
+            query: () => ({
                 url: SERVICES_URL,
                 method: 'POST',
-                body: data,
             }),
             invalidatesTags: ['Service'],
         }),

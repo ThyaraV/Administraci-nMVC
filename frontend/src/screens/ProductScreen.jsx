@@ -50,6 +50,12 @@ const ProductScreen = () => {
                         Price: ${product.price}
                     </ListGroup.Item>
                     <ListGroup.Item>
+                                Service Type: {product.service?.type || 'N/A'}
+                            </ListGroup.Item>
+                            <ListGroup.Item>
+                                Supplier Category: {product.supplierType?.category || 'N/A'}
+                            </ListGroup.Item>
+                    <ListGroup.Item>
                         Description: {product.description}
                     </ListGroup.Item>
                 </ListGroup>

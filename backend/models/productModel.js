@@ -29,6 +29,16 @@ const productSchema=new mongoose.Schema({
         required:true,
         ref:"User",
     },
+    service: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Service', // Asegúrate de que este nombre coincida con tu modelo de servicio
+        required: false // Opcional o requerido según tu necesidad
+    },
+    supplierType: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'SupplierType', // Asegúrate de que este nombre coincida con tu modelo de tipo de proveedor
+        required: false // Opcional o requerido según tu necesidad
+    },
     name:{
         type:String,
         required:true,

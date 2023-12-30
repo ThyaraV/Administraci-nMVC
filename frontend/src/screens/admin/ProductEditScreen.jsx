@@ -6,7 +6,8 @@ import Loader from "../../components/Loader";
 import FormContainer from "../../components/formContainer";
 import {toast} from 'react-toastify'
 import { useUpdateProductMutation, useGetProductsDetailsQuery,useUploadProductImageMutation } from "../../slices/productsApiSlice";
-
+import { useGetServicesQuery } from "../../slices/servicesApiSlice";
+import { useGetSupplierTypesQuery } from "../../slices/supplierTypesApiSlice";
 
 const ProductEditScreen = () => {
     const {id: productId}=useParams();
@@ -18,6 +19,9 @@ const ProductEditScreen = () => {
     const [category,setCategory]=useState('');
     const[description,setDescription]=useState('');
   
+    const [service, setService] = useState('');
+    const [supplierType, setSupplierType] = useState('');
+
     const {
         data:product,
         isLoading,
@@ -27,6 +31,18 @@ const ProductEditScreen = () => {
 
     const [updateProduct,{isLoading:loadingUpdate}]=useUpdateProductMutation();
     const[uploadProductImage,{isLoading:loadingUpload}]=useUploadProductImageMutation();
+
+      // Obtiene datos de servicios y tipos de proveedores
+      const { data: services } = useGetServicesQuery();
+      const { data: supplierTypes } = useGetSupplierTypesQuery();
+
+    const uniqueServiceTypes = Array.from(new Set(services?.map(service => service.type))).map(type => {
+        return services.find(service => service.type === type);
+    });
+
+    const uniqueSupplierCategories = Array.from(new Set(supplierTypes?.map(type => type.category))).map(category => {
+        return supplierTypes.find(type => type.category === category);
+    });
 
     const navigate =useNavigate();
 
@@ -38,6 +54,8 @@ const ProductEditScreen = () => {
             setBrand(product.brand);
             setCategory(product.category);
             setDescription(product.description);
+            setService(product.service?._id || 'N/A'); // Asegúrate de usar el ID
+            setSupplierType(product.supplierType?._id || 'N/A');
         }
     },[product]);
 
@@ -51,6 +69,8 @@ const ProductEditScreen = () => {
             brand,
             category,
             description,
+            service,
+            supplierType
         };
 
         const result= await updateProduct(updatedProduct);
@@ -117,27 +137,22 @@ const ProductEditScreen = () => {
                         <Form.Control type='file' label='Choose file' onChange={uploadFileHandler}></Form.Control>
                     </Form.Group>
 
-                    <Form.Group controlId='brand' className="my-2">
-                        <Form.Label>Supplier</Form.Label>
-                        <Form.Control
-                        type='brand'
-                        placeholder='Enter brand'
-                        value={brand}
-                        onChange={(e)=>setBrand(e.target.value)}>
-
+                    <Form.Group controlId='service' className="my-2">
+                        <Form.Label>Service Type</Form.Label>
+                        <Form.Control as='select' value={service} onChange={(e) => setService(e.target.value)}>
+                            {uniqueServiceTypes?.map(s => (
+                                <option key={s._id} value={s._id}>{s.type}</option>
+                            ))}
                         </Form.Control>
-
                     </Form.Group>
-                    <Form.Group controlId='category' className="my-2">
-                        <Form.Label>Category</Form.Label>
-                        <Form.Control
-                        type='text'
-                        placeholder='Enter category'
-                        value={category}
-                        onChange={(e)=>setCategory(e.target.value)}>
 
+                    <Form.Group controlId='supplierType' className="my-2">
+                        <Form.Label>Supplier Type</Form.Label>
+                        <Form.Control as='select' value={supplierType} onChange={(e) => setSupplierType(e.target.value)}>
+                            {uniqueSupplierCategories?.map(st => (
+                                <option key={st._id} value={st._id}>{st.category}</option>
+                            ))}
                         </Form.Control>
-
                     </Form.Group>
                     <Form.Group controlId='description' className="my-2">
                         <Form.Label>Description</Form.Label>

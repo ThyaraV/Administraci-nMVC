@@ -26,6 +26,10 @@ import UserListScreen from './screens/admin/UserListScreen';
 import UserEditScreen from './screens/admin/UserEditScreen';
 import FilterScreen from './screens/FilterScreen';
 import CartScreen from './screens/CartScreen';
+import ServiceListScreen from './screens/admin/serviceListScreen';
+import SupplierTypesListScreen from './screens/admin/supplierTypesListScreen';
+import ServiceEditScreen from './screens/admin/serviceEditScreen';
+import SupplierTypesEditScreen from './screens/admin/supplierTypesEditScreen';
 
 const router=createBrowserRouter(
   createRoutesFromElements(
@@ -45,6 +49,10 @@ const router=createBrowserRouter(
           <Route path="/admin/product/:id/edit" element={<ProductEditScreen/>}/>
           <Route path="/admin/userlist" element={<UserListScreen/>}/>
           <Route path="/admin/user/:id/edit" element={<UserEditScreen/>}/>
+          <Route path="/admin/servicelist" element={<ServiceListScreen/>}/>
+          <Route path="/admin/suppliertypelist" element={<SupplierTypesListScreen/>}/>
+          <Route path="/admin/service/:id/edit" element={<ServiceEditScreen/>}/>
+          <Route path="/admin/supplierType/:id/edit" element={<SupplierTypesEditScreen/>}/>
 
         </Route>
        

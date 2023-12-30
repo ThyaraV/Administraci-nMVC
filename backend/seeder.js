@@ -20,18 +20,14 @@ connectDB();
 const importData = async () => {
     try {
         await Order.deleteMany();
-        await Product.deleteMany();
-        await User.deleteMany();
         await Service.deleteMany();
         await SupplierType.deleteMany();
+        await Product.deleteMany();
+        await User.deleteMany();
         await Supplier.deleteMany();
 
         const createdUsers = await User.insertMany(users);
         const adminUser = createdUsers[0]._id;
-
-        const sampleProducts = products.map(product => {
-            return { ...product, user: adminUser };
-        });
 
         const sampleServices = services.map(service => {
             return { ...service, user: adminUser };
@@ -41,7 +37,19 @@ const importData = async () => {
             return { ...supplierType, user: adminUser };
         });
 
+        const createdServices = await Service.insertMany(sampleServices);
         const createdSupplierTypes = await SupplierType.insertMany(sampleSupplierTypes);
+
+        if (!createdServices.length || !createdSupplierTypes.length) {
+            throw new Error('No services or supplier types available for products');
+        }
+
+        const sampleProducts = products.map(product => ({
+            ...product,
+            user: adminUser,
+            service: createdServices[0]._id, // Asignar el ID del primer servicio creado
+            supplierType: createdSupplierTypes[0]._id // Asignar el ID del primer tipo de proveedor creado
+        }));
 
         const sampleSuppliers = suppliers.map((supplier, index) => {
             return {
@@ -51,9 +59,9 @@ const importData = async () => {
             };
         });
 
-        await Product.insertMany(sampleProducts);
         await Service.insertMany(sampleServices);
         await SupplierType.insertMany(sampleSupplierTypes);
+        await Product.insertMany(sampleProducts);
         await Supplier.insertMany(sampleSuppliers);
 
         console.log('Data Imported!'.green.inverse);

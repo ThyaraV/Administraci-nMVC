@@ -21,12 +21,14 @@ const getServices = asyncHandler(async (req, res) => {
 //@route POST /api/services
 //@access Private/admin
 const createService = asyncHandler(async (req, res) => {
+    const { type, description, averageCost, popularity} = req.body;
+
     const service = new Service({
-        type: "Sample Type",
-        description: "Sample Description",
+        type: type || "Sample Type",
+        description: description || "Sample Description",
         user: req.user._id,
-        averageCost: 0,
-        popularity: 0
+        averageCost: averageCost || 0,
+        popularity: popularity || 0
     });
 
     const createdService = await service.save();
@@ -83,4 +85,10 @@ const deleteService = asyncHandler(async (req, res) => {
     }
 });
 
-export { getServices, getServiceById, createService, updateService, deleteService };
+// Obtener todos los servicios
+const getAllServices = asyncHandler(async (req, res) => {
+    const services = await Service.find({});
+    res.json(services);
+});
+
+export { getServices, getServiceById, createService, updateService, deleteService, getAllServices };

@@ -75,4 +75,10 @@ const deleteSupplierType = asyncHandler(async (req, res) => {
     }
 });
 
-export { getSupplierTypes, getSupplierTypeById, createSupplierType, updateSupplierType, deleteSupplierType };
+// Obtener todos los tipos de proveedores
+const getAllSupplierTypes = asyncHandler(async (req, res) => {
+    const supplierTypes = await SupplierType.find({});
+    res.json(supplierTypes);
+});
+
+export { getSupplierTypes, getSupplierTypeById, createSupplierType, updateSupplierType, deleteSupplierType, getAllSupplierTypes};

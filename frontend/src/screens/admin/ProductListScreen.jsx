@@ -61,6 +61,8 @@ const ProductListScreen = () => {
                         <th>PRICE</th>
                         <th>CATEGORY</th>
                         <th>BRAND</th>
+                        <th>SERVICE</th>
+                        <th>SUPPLIER TYPE</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -71,6 +73,8 @@ const ProductListScreen = () => {
                             <td>{product.price}</td>
                             <td>{product.category}</td>
                             <td>{product.brand}</td>
+                            <td>{product.service?.type || 'N/A'}</td> {/* Mostrar el tipo de servicio */}
+                            <td>{product.supplierType?.category || 'N/A'}</td> {/* Mostrar la categoría del proveedor */}
                             <td>
                                 <LinkContainer to={`/admin/product/${product._id}/edit`}>
                                     <Button variant='light' className='btn-sm mx-2'>
@@ -88,10 +92,7 @@ const ProductListScreen = () => {
             </Table>
         </>
 
-    )}
-    
-    
-    
+    )}   
     </>
 }
 
