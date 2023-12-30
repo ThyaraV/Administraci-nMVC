@@ -10,18 +10,20 @@ import Product from '../models/productModel.js';
     res.json(products);
 });*/
 const getProducts = asyncHandler(async (req, res) => {
-    const budget = req.query.budget;
-
+    const { budget, service, supplierType } = req.query;
     let query = {};
 
     if (budget) {
         query.price = { $lte: budget };
     }
-    // Incluye información de 'service' y 'supplierType'
-    const products = await Product.find(query)
-                                  .populate('service', 'type') // Asumiendo que 'service' es la referencia y 'type' es el campo que deseas incluir
-                                  .populate('supplierType', 'category'); // Asumiendo que 'supplierType' es la referencia y 'category' es el campo que deseas incluir
+    if (service) {
+        query.service = service;
+    }
+    if (supplierType) {
+        query.supplierType = supplierType;
+    }
 
+    const products = await Product.find(query).populate('service').populate('supplierType');
     res.json(products);
 });
 

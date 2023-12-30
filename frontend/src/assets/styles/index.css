@@ -51,3 +51,25 @@ table th {
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
 }
+/* Agrega este estilo en tu archivo CSS */
+.filter-input {
+  margin-bottom: 15px; /* Espacio debajo de cada entrada */
+  width: 60%; /* Ocupar el ancho completo */
+  border-radius: 5px;
+}
+
+.filter-button {
+  width: 60%; /* Ocupar el ancho completo */
+  background-color: #5981ac; /* Color del botón */
+  color: white; /* Color del texto */
+  border: none; /* Sin borde */
+  padding: 10px; /* Relleno para hacerlo más grande */
+  cursor: pointer; /* Cursor de mano al pasar por encima */
+  border-radius: 5px;
+}
+
+.filter-button:hover {
+  background-color: #2a3b4d; /* Cambiar color al pasar el ratón por encima */
+}
+
+

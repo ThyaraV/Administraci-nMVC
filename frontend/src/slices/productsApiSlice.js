@@ -4,18 +4,26 @@ import { apiSlice } from "./apiSlice.js";
 export const productsApiSlice=apiSlice.injectEndpoints({
     endpoints:(builder)=>({
         getProducts: builder.query({
-            query: (budget) => {
-                let queryParams = '';
-                if (budget) {
-                    queryParams = `?budget=${budget}`;
+            query: (filters) => {
+                let queryParams = new URLSearchParams();
+        
+                if (filters.budget) {
+                    queryParams.append('budget', filters.budget);
                 }
+                if (filters.service) {
+                    queryParams.append('service', filters.service);
+                }
+                if (filters.supplierType) {
+                    queryParams.append('supplierType', filters.supplierType);
+                }
+        
                 return {
-                    url: `${PRODUCTS_URL}${queryParams}`,
+                    url: `${PRODUCTS_URL}?${queryParams.toString()}`,
                 };
             },
             providesTags: ['Product'],
             keepUnusedDataFor: 5
-        }),
+        }),        
         getProductsDetails:builder.query({
             query:(productId)=>({
                 url:`${PRODUCTS_URL}/${productId}`,
