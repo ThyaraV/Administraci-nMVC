@@ -18,7 +18,7 @@ const ProductListScreen = () => {
                 toast.success('Product deleted');
                 refetch();
             }catch(err){
-                toast.error(err?.data?.Message || err.error);
+                toast.error(err?.data?.Message || (typeof err.error === 'object' ? JSON.stringify(err.error) : err.error));
             }
         }
 
@@ -30,7 +30,7 @@ const ProductListScreen = () => {
                 await createProduct();
                 refetch();
             }catch(err){
-                toast.error(err?.data?.Message || err.error);
+                toast.error(err?.data?.Message || (typeof err.error === 'object' ? JSON.stringify(err.error) : err.error));
             }
         }
     }
@@ -50,7 +50,7 @@ const ProductListScreen = () => {
     {loadingCreate && <Loader/>}
     {loadingDelete && <Loader/>}
     {isLoading ? <Loader/> : error ? <Message variant='danger'>
-        {error}
+        {error.message || "An error occurred"}
     </Message>:(
         <>
             <Table stripped hover responsive className='table-sm'>

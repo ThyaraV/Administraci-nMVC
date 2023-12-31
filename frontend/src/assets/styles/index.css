@@ -60,7 +60,7 @@ table th {
 
 .filter-button {
   width: 60%; /* Ocupar el ancho completo */
-  background-color: #5981ac; /* Color del botón */
+  background-color: #bb8f56; /* Color del botón */
   color: white; /* Color del texto */
   border: none; /* Sin borde */
   padding: 10px; /* Relleno para hacerlo más grande */
@@ -69,7 +69,7 @@ table th {
 }
 
 .filter-button:hover {
-  background-color: #2a3b4d; /* Cambiar color al pasar el ratón por encima */
+  background-color: #d870b5; /* Cambiar color al pasar el ratón por encima */
 }
 
 

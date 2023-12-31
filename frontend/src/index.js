@@ -13,7 +13,7 @@ import './assets/styles/bootstrap.custom.css';
 import './assets/styles/index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import PrivateRoutes from './components/PrivateRoutes';
+import PrivateRoute from './components/PrivateRoute';
 import HomeScreen from './screens/HomeScreen';
 import ProductScreen from './screens/ProductScreen';
 import LoginScreen from './screens/loginScreen';
@@ -33,7 +33,7 @@ import SupplierTypesEditScreen from './screens/admin/supplierTypesEditScreen';
 import SupplierListScreen from './screens/admin/supplierListScreen';
 import SupplierEditScreen from './screens/admin/supplierEditScreen';
 import RecomendationScreen from './screens/RecomendationScreen';
-
+import ShippingScreens from './screens/ShippingScreens';
 
 const router=createBrowserRouter(
   createRoutesFromElements(
@@ -42,11 +42,12 @@ const router=createBrowserRouter(
         <Route path="/product/:id" element={<ProductScreen/>}/>
         <Route path="/login" element={<LoginScreen/>}/>
         <Route path="register" element={<RegisterScreen/>}/>
-        <Route path='' element={<PrivateRoutes/>}>
+        <Route path='' element={<PrivateRoute/>}>
         <Route path="/Profile" element={<ProfileScreen/>}/>
         <Route path="/Filter" element={<FilterScreen/>}/>
         <Route path="/cart" element={<CartScreen/>}/>
         <Route path="/recomendation" element={<RecomendationScreen/>}/>
+        <Route path="/shipping" element={<ShippingScreens/>}/>
         </Route>
         
         <Route path="" element={<AdminRoute/>}>
