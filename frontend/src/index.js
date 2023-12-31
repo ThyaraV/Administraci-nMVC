@@ -32,6 +32,7 @@ import ServiceEditScreen from './screens/admin/serviceEditScreen';
 import SupplierTypesEditScreen from './screens/admin/supplierTypesEditScreen';
 import SupplierListScreen from './screens/admin/supplierListScreen';
 import SupplierEditScreen from './screens/admin/supplierEditScreen';
+import RecomendationScreen from './screens/RecomendationScreen';
 
 
 const router=createBrowserRouter(
@@ -45,6 +46,7 @@ const router=createBrowserRouter(
         <Route path="/Profile" element={<ProfileScreen/>}/>
         <Route path="/Filter" element={<FilterScreen/>}/>
         <Route path="/cart" element={<CartScreen/>}/>
+        <Route path="/recomendation" element={<RecomendationScreen/>}/>
         </Route>
         
         <Route path="" element={<AdminRoute/>}>
