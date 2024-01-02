@@ -34,6 +34,8 @@ import SupplierListScreen from './screens/admin/supplierListScreen';
 import SupplierEditScreen from './screens/admin/supplierEditScreen';
 import RecomendationScreen from './screens/RecomendationScreen';
 import ShippingScreens from './screens/ShippingScreens';
+import PaymentScreen from './screens/PaymentScreen';
+import PlaceOrderScreen from './screens/placeOrderScreen';
 
 const router=createBrowserRouter(
   createRoutesFromElements(
@@ -48,6 +50,8 @@ const router=createBrowserRouter(
         <Route path="/cart" element={<CartScreen/>}/>
         <Route path="/recomendation" element={<RecomendationScreen/>}/>
         <Route path="/shipping" element={<ShippingScreens/>}/>
+        <Route path="/payment" element={<PaymentScreen/>}/>
+        <Route path="/placeorder" element={<PlaceOrderScreen/>}/>
         </Route>
         
         <Route path="" element={<AdminRoute/>}>

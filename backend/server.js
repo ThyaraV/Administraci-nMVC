@@ -11,6 +11,7 @@ import uploadRoutes from './routes/uploadRoutes.js';
 import serviceRoutes from './routes/serviceRoutes.js';
 import supplierTypeRoutes from './routes/supplierTypeRoutes.js';
 import supplierRoutes from './routes/supplierRoutes.js';
+import orderRoutes from './routes/orderRoutes.js'
 
 const port=process.env.PORT || 5000;
 
@@ -37,6 +38,7 @@ app.use('/api/services', serviceRoutes);
 app.use('/api/supplierTypes', supplierTypeRoutes);
 app.use('/api/suppliers', supplierRoutes);
 app.use('/api/users',userRoutes);
+app.use('/api/orders',orderRoutes);
 app.use('/api/upload',uploadRoutes);
 
 
