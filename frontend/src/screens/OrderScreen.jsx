@@ -8,7 +8,7 @@ import Message from '../components/message';
 import Loader from '../components/Loader';
 import { useGetOrderDetailsQuery, 
     usePayOrderMutation,
-    useGetPayPalClientIdQuery
+    useGetPayPalClientIdQuery,useDeliverOrderMutation
 } from '../slices/orderApiSlice';
 
 
@@ -22,6 +22,8 @@ const OrderScreen = () => {
     }=useGetOrderDetailsQuery(orderId);
 
 const [payOrder,{isLoading:loadingPay}]=usePayOrderMutation();
+
+const[deliverOrder,{isLoading:loadingDeliver}]=useDeliverOrderMutation();
 
 const [{isPending},paypalDispatch]=usePayPalScriptReducer();
 
@@ -85,6 +87,16 @@ function createOrder(data,actions){
     }).then((orderId)=>{
         return orderId;
     });
+}
+
+const deliverOrderHandler=async()=>{
+    try{
+        await deliverOrder(orderId);
+        refetch();
+        toast.success('Order delivered');
+    }catch(err){
+        toast.error(err?.data?.message || err.message);
+    }
 }
     return isLoading ? <Loader/>: error ? <Message variant="danger">{JSON.stringify(error)}</Message>
     :(
@@ -195,7 +207,20 @@ function createOrder(data,actions){
                             )
 
                             }
-                            {/*MARK AS DELIVERED PLACEHOLDER */}
+                            {loadingDeliver && <Loader/>}
+                            {userInfo && userInfo.isAdmin && order.isPaid &&!order.isDelivered && (
+                                <ListGroup.Item>
+                                    <Button type='Button' className='btn btn-clock'
+                                    onClick={deliverOrderHandler}>
+                                        Mark As Delivered
+                                    </Button>
+                                </ListGroup.Item>
+                            )
+                
+
+                            }
+
+                            
                     </ListGroup>
                 </Card>
             </Col>

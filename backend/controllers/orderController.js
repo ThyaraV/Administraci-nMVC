@@ -84,15 +84,74 @@ const updateOrderToPaid=asyncHandler(async(req,res)=>{
 //@route PUT/api/orders/:id/deliver
 //@access Private/Admin
 const updateOrderToDelivered=asyncHandler(async(req,res)=>{
-    res.send('update order to delivered');
+    const order=await Order.findById(req.params.id);
+    if(order){
+        order.isDelivered=true;
+        order.deliveredAt=Date.now();
+
+        const updateOrder= await order.save();
+        res.status(200).json(updateOrder);
+    }else{
+        res.status(404);
+        throw new Error('Order not found');
+    }
 });
 
 //@desc Get all orders
 //@route GET/api/orders
 //@access Private/Admin
 const getOrders=asyncHandler(async(req,res)=>{
-    res.send('get all orders');
+    const orders=await Order.find({}).populate('user','id name');
+    res.status(200).json(orders);
 });
+
+
+//
+const analyzeUserPreferences = async (userId) => {
+    const orders = await Order.find({ user: userId }).populate({
+        path: 'orderItems.product',
+        populate: { 
+            path: 'service supplierType', 
+            model: 'Service SupplierType' 
+        }
+    });
+
+    let userPreferences = {
+        serviceTypes: {}, // Almacenar la frecuencia de tipos de servicio
+        priceRanges: {}   // Almacenar la frecuencia de rangos de precio
+    };
+
+    orders.forEach(order => {
+        order.orderItems.forEach(item => {
+            // Suponiendo que 'service' y 'supplierType' están disponibles en 'product'
+            let serviceType = item.product.service?.type;
+            let priceRange = item.product.supplierType?.priceRange;
+
+            // Analizar tipo de servicio
+            if (serviceType) {
+                userPreferences.serviceTypes[serviceType] = (userPreferences.serviceTypes[serviceType] || 0) + 1;
+            }
+
+            // Analizar rango de precio
+            if (priceRange) {
+                userPreferences.priceRanges[priceRange] = (userPreferences.priceRanges[priceRange] || 0) + 1;
+            }
+        });
+    });
+
+    return userPreferences;
+};
+
+const getMyOrdersWithPreferences = asyncHandler(async(req, res) => {
+    const orders = await Order.find({ user: req.user._id });
+    if (orders) {
+        const preferences = analyzeUserPreferences(orders);
+        res.status(200).json({ orders, preferences });
+    } else {
+        res.status(404).send('No orders found');
+    }
+});
+
 
 export{
     addOrderItems,
@@ -100,12 +159,6 @@ export{
     getOrderById,
     updateOrderToPaid,
     updateOrderToDelivered,
-    getOrders
+    getOrders,
+    getMyOrdersWithPreferences
 };
-
-
-
-
-
-
-
