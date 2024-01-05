@@ -8,7 +8,7 @@ import Loader from "../components/Loader";
 import {FaTimes} from "react-icons/fa"
 import { useProfileMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authSlice";
-import { ordersApiSlice, useGetMyOrdersQuery } from "../slices/orderApiSlice";
+import { useGetMyOrdersQuery } from "../slices/orderApiSlice";
 
 const ProfileScreen = () => {
     const [name,setName]=useState('')
@@ -114,6 +114,7 @@ const ProfileScreen = () => {
                         <thead>
                             <tr>
                                 <th>ID</th>
+                                <th>NAME</th>
                                 <th>DATE</th>
                                 <th>TOTAL</th>
                                 <th>PAID</th>
@@ -124,6 +125,11 @@ const ProfileScreen = () => {
                             {orders.map((order)=>(
                                 <tr key={order._id}>
                                     <td>{order._id}</td>
+                                    <td>
+                                        {order.orderItems.map((item, index) => (
+                                            <div key={index}>{item.name}</div>
+                                        ))}
+                                    </td>
                                     <td>{order.createdAt.substring(0,10)}</td>
                                     <td>{order.totalPrice}</td>
                                     <td>

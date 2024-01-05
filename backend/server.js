@@ -12,6 +12,7 @@ import serviceRoutes from './routes/serviceRoutes.js';
 import supplierTypeRoutes from './routes/supplierTypeRoutes.js';
 import supplierRoutes from './routes/supplierRoutes.js';
 import orderRoutes from './routes/orderRoutes.js'
+import recommendationRoutes from './routes/recommendationRoutes.js';
 
 const port=process.env.PORT || 5000;
 
@@ -40,7 +41,7 @@ app.use('/api/suppliers', supplierRoutes);
 app.use('/api/users',userRoutes);
 app.use('/api/orders',orderRoutes);
 app.use('/api/upload',uploadRoutes);
-
+app.use('/api/recommendations', recommendationRoutes);
 app.get('/api/config/paypal',(req,res)=>res.send({clientId:process.env.PAYPAL_CLIENT_ID}));
 
 

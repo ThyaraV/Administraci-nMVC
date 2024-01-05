@@ -59,8 +59,8 @@ const ProductListScreen = () => {
                         <th>ID</th>
                         <th>NAME</th>
                         <th>PRICE</th>
-                        <th>CATEGORY</th>
-                        <th>BRAND</th>
+                        {/*<th>CATEGORY</th>*/}
+                        {/*<th>BRAND</th>*/}
                         <th>SERVICE</th>
                         <th>SUPPLIER TYPE</th>
                     </tr>
@@ -71,8 +71,8 @@ const ProductListScreen = () => {
                             <td>{product._id}</td>
                             <td>{product.name}</td>
                             <td>{product.price}</td>
-                            <td>{product.category}</td>
-                            <td>{product.brand}</td>
+                            {/*<td>{product.category}</td>*/}
+                            {/*<td>{product.brand}</td>*/}
                             <td>{product.service?.type || 'N/A'}</td> {/* Mostrar el tipo de servicio */}
                             <td>{product.supplierType?.category || 'N/A'}</td> {/* Mostrar la categoría del proveedor */}
                             <td>

@@ -1,40 +1,68 @@
-import React from 'react';
-import { useGetUserPreferencesQuery } from '../slices/orderApiSlice'; // Asegúrate de usar la ruta correcta
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const RecommendationScreen = () => {
-  const { data: userPreferences, isLoading, isError } = useGetUserPreferencesQuery();
+    const [recommendations, setRecommendations] = useState({ products: [], suppliers: [] });
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
 
-    // Verifica si se está cargando la información
-    if (isLoading) return <div>Cargando...</div>;
+    useEffect(() => {
+        const fetchRecommendations = async () => {
+            try {
+                const { data } = await axios.get('/api/recommendations');
+                setRecommendations(data);
+            } catch (err) {
+                setError('Error fetching recommendations: ' + err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    // Verifica si hubo algún error en la carga
-    if (isError) return <div>Error al cargar las recomendaciones</div>;
+        fetchRecommendations();
+    }, []);
 
-    // Aquí puedes interpretar las preferencias del usuario para hacer recomendaciones
-    // Por ejemplo, si las preferencias incluyen tipos de servicios más populares
-    const popularServices = userPreferences?.serviceTypes;
-    const popularSupplierTypes = userPreferences?.supplierTypes;
-
+    
     return (
-        <div>
-            <h2>Recomendaciones para Ti</h2>
-            {/* Aquí se pueden mostrar recomendaciones basadas en los servicios y tipos de proveedores populares */}
-            <div>
-                <h3>Servicios Populares</h3>
-                {popularServices ? (
-                    Object.entries(popularServices).map(([service, count]) => (
-                        <p key={service}>{service} (Solicitado {count} veces)</p>
-                    ))
-                ) : <p>No hay suficientes datos para mostrar servicios populares.</p>}
-            </div>
-            <div>
-                <h3>Tipos de Proveedores Populares</h3>
-                {popularSupplierTypes ? (
-                    Object.entries(popularSupplierTypes).map(([type, count]) => (
-                        <p key={type}>{type} (Solicitado {count} veces)</p>
-                    ))
-                ) : <p>No hay suficientes datos para mostrar tipos de proveedores populares.</p>}
-            </div>
+        <div className="recommendation-container">
+            <h1>Your Personalized Recommendations</h1>
+            {loading ? (
+                <p>Loading...</p>
+            ) : error ? (
+                <p>Error: {error}</p>
+            ) : (
+                <>
+                    <div className="recommendation-section">
+                        <h2>Products You Might Like</h2>
+                        <div className="recommendation-grid">
+                            {recommendations.products.map(product => (
+                                <div key={product._id} className="recommendation-card">
+                                    <img src={product.image} alt={product.name} className="recommendation-image" />
+                                    <div className="recommendation-info">
+                                        <h3>{product.name}</h3>
+                                        <p>{product.description}</p>
+                                        <p>Average Rating: {product.reviews.reduce((sum, review) => sum + review.rating, 0) / product.reviews.length}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="recommendation-section">
+                        <h2>Suppliers You Might Like</h2>
+                        <div className="recommendation-grid">
+                            {recommendations.suppliers.map(supplier => (
+                                <div key={supplier._id} className="recommendation-card">
+                                    <img src={supplier.image} alt={supplier.name} className="recommendation-image" />
+                                    <div className="recommendation-info">
+                                        <h3>{supplier.name}</h3>
+                                        <p>{supplier.description}</p>
+                                        <p>Rating: {supplier.ratings}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </>
+            )}
         </div>
     );
 };
