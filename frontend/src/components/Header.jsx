@@ -50,6 +50,10 @@ const Header = () => {
                         <Nav.Link><FaAward />Recomendation
                         </Nav.Link>
                         </LinkContainer>
+                        <LinkContainer to='/sScreen'>
+                        <Nav.Link><FaListUl/>Supplier
+                        </Nav.Link>
+                        </LinkContainer>
                         <LinkContainer to='/cart'>
                         <Nav.Link><FaShoppingCart/>Cart
                                {

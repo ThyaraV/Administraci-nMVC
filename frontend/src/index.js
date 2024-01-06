@@ -34,11 +34,13 @@ import SupplierTypesEditScreen from './screens/admin/supplierTypesEditScreen';
 import SupplierListScreen from './screens/admin/supplierListScreen';
 import SupplierEditScreen from './screens/admin/supplierEditScreen';
 import RecomendationScreen from './screens/RecomendationScreen';
+import SScreen from './screens/admin/sScreen'
 import ShippingScreens from './screens/ShippingScreens';
 import PaymentScreen from './screens/PaymentScreen';
 import PlaceOrderScreen from './screens/placeOrderScreen';
 import OrderScreen from './screens/OrderScreen';
 import OrderListScreen from './screens/admin/OrderListScreen';
+import SupplierScreen from './screens/supplierScreen';
 
 const router=createBrowserRouter(
   createRoutesFromElements(
@@ -49,12 +51,14 @@ const router=createBrowserRouter(
         <Route path="register" element={<RegisterScreen/>}/>
         <Route path='' element={<PrivateRoute/>}>
         <Route path="/Profile" element={<ProfileScreen/>}/>
+        <Route path="/sScreen" element={<SScreen/>}/>
         <Route path="/Filter" element={<FilterScreen/>}/>
         <Route path="/cart" element={<CartScreen/>}/>
         <Route path="/recomendation" element={<RecomendationScreen/>}/>
         <Route path="/shipping" element={<ShippingScreens/>}/>
         <Route path="/payment" element={<PaymentScreen/>}/>
         <Route path="/placeorder" element={<PlaceOrderScreen/>}/>
+        <Route path="/supplier" element={<SupplierScreen/>}/>
         <Route path="/order/:id" element={<OrderScreen/>}/>
         </Route>
         
