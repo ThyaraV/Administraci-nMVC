@@ -1,29 +1,25 @@
 import { PRODUCTS_URL,UPLOAD_URL } from "../constants.js";
 import { apiSlice } from "./apiSlice.js";
-
+//lógica de interacción con APIs
 export const productsApiSlice=apiSlice.injectEndpoints({
     endpoints:(builder)=>({
         getProducts: builder.query({
-            query: (filters={}) => {
+            query: (filters = {}) => {
                 let queryParams = new URLSearchParams();
-        
-                if (filters.budget) {
-                    queryParams.append('budget', filters.budget);
-                }
-                if (filters.service) {
-                    queryParams.append('service', filters.service);
-                }
-                if (filters.supplierType) {
-                    queryParams.append('supplierType', filters.supplierType);
-                }
-        
+
+                Object.keys(filters).forEach(key => {
+                    if (filters[key]) {
+                        queryParams.append(key, filters[key]);
+                    }
+                });
+
                 return {
                     url: `${PRODUCTS_URL}?${queryParams.toString()}`,
                 };
             },
             providesTags: ['Product'],
             keepUnusedDataFor: 5
-        }),  
+        }),
         getProductsEvent: builder.query({
             query: () => ({
                  url: PRODUCTS_URL,

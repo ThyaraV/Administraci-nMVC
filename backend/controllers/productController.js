@@ -10,23 +10,22 @@ import Product from '../models/productModel.js';
     res.json(products);
 });*/
 const getProducts = asyncHandler(async (req, res) => {
-    const { budget, service, supplierType } = req.query;
-    let query = {};
+    const query = {};
+    const queryKeys = ['budget', 'service', 'supplierType'];
 
-    if (budget) {
-        query.price = { $lte: budget };
-    }
-    if (service) {
-        query.service = service;
-    }
-    if (supplierType) {
-        query.supplierType = supplierType;
-    }
+    queryKeys.forEach(key => {
+        if (req.query[key]) {
+            if (key === 'budget') {
+                query.price = { $lte: req.query[key] };
+            } else {
+                query[key] = req.query[key];
+            }
+        }
+    });
 
     const products = await Product.find(query).populate('service').populate('supplierType');
     res.json(products);
 });
-
 
 //@desc Create a product
 //@route POST/api/products

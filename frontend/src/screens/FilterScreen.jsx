@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import Product from '../components/Product.jsx';
 import Loader from '../components/Loader.jsx';
@@ -9,30 +9,29 @@ import { useGetSupplierTypesQuery } from '../slices/supplierTypesApiSlice.js';
 
 const FilterScreen = () => {
   const [inputBudget, setInputBudget] = useState('');
-  const [queryBudget, setQueryBudget] = useState('');
-
   const [selectedService, setSelectedService] = useState('');
   const [selectedSupplierType, setSelectedSupplierType] = useState('');
   
-  const { data: services} = useGetServicesQuery();
-  const { data: supplierType } = useGetSupplierTypesQuery();
+  const { data: services } = useGetServicesQuery();
+  const { data: supplierTypes } = useGetSupplierTypesQuery();
 
   const uniqueServices = Array.from(new Set(services?.map(service => service.type)))
                            .map(type => services.find(service => service.type === type));
 
-  const uniqueSupplierTypes = Array.from(new Set(supplierType?.map(type => type.category)))
-                                 .map(category => supplierType.find(type => type.category === category));
+  const uniqueSupplierTypes = Array.from(new Set(supplierTypes?.map(type => type.category)))
+                                   .map(category => supplierTypes.find(type => type.category === category));
 
-  const handleFilter = () => {
-    const filters = {
-        budget: inputBudget,
-        service: selectedService,
-        supplierType: selectedSupplierType,
-    };
-    setQueryBudget(filters); // Actualiza el presupuesto para la consulta
-  }
+  const [filters, setFilters] = useState({});
 
-  const { data: products, isLoading, error } = useGetProductsQuery(queryBudget);
+  useEffect(() => {
+    setFilters({
+      budget: inputBudget,
+      service: selectedService,
+      supplierType: selectedSupplierType,
+    });
+  }, [inputBudget, selectedService, selectedSupplierType]);
+
+  const { data: products, isLoading, error } = useGetProductsQuery(filters);
 
   return (
     <>
@@ -43,20 +42,28 @@ const FilterScreen = () => {
             placeholder="Ingrese su presupuesto" 
             className="filter-input"
         />
-        <select value={selectedService} onChange={(e) => setSelectedService(e.target.value)} className="filter-input">
+        <select 
+            value={selectedService} 
+            onChange={(e) => setSelectedService(e.target.value)} 
+            className="filter-input"
+        >
             <option value=''>Selecciona un Servicio</option>
             {uniqueServices?.map(service => (
                 <option key={service._id} value={service._id}>{service.type}</option>
             ))}
         </select>
 
-        <select value={selectedSupplierType} onChange={(e) => setSelectedSupplierType(e.target.value)} className="filter-input">
+        <select 
+            value={selectedSupplierType} 
+            onChange={(e) => setSelectedSupplierType(e.target.value)} 
+            className="filter-input"
+        >
             <option value=''>Selecciona un Tipo de Proveedor</option>
             {uniqueSupplierTypes?.map(type => (
                 <option key={type._id} value={type._id}>{type.category}</option>
             ))}
         </select>
-        <button onClick={handleFilter} className="filter-button">Filtrar</button>
+        <button className="filter-button">Filtrar</button>
 
         {isLoading ? (
             <Loader />
@@ -68,7 +75,7 @@ const FilterScreen = () => {
             <>
                 <h1>Filter Events</h1>
                 <Row>
-                    {products.map((product) => (
+                    {products?.map((product) => (
                         <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
                             <Product product={product} />
                         </Col>
@@ -77,7 +84,7 @@ const FilterScreen = () => {
             </>
         )}
     </>
-)
+  );
 }
 
 export default FilterScreen;

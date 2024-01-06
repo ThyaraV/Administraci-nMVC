@@ -42,6 +42,18 @@ export const getRecommendations = asyncHandler(async (req, res) => {
     }).populate('supplierType').populate('reviews');
 
     const filteredProductsInLikedCategories = productsInLikedCategories.filter(product => {
+        if (!product.reviews || product.reviews.length === 0) {
+            return false; // Excluir productos sin revisiones
+        }
+        const totalRating = product.reviews.reduce((acc, review) => acc + review.rating, 0);
+        const averageRating = totalRating / product.reviews.length;
+        return averageRating >= 3;
+    });
+
+    filteredProductsInLikedCategories.forEach(product => {
+        recommendedProducts.add(product);
+    });
+    /*const filteredProductsInLikedCategories = productsInLikedCategories.filter(product => {
         const totalRating = product.reviews.reduce((acc, review) => acc + review.rating, 0);
         const averageRating = product.reviews.length > 0 ? totalRating / product.reviews.length : 0;
         return averageRating >= 3;
@@ -49,7 +61,7 @@ export const getRecommendations = asyncHandler(async (req, res) => {
 
     filteredProductsInLikedCategories.forEach(product => {
         recommendedProducts.add(product);
-    });
+    });*/
 
     // Buscar proveedores asociados con los SupplierTypes encontrados y agrupar sus calificaciones
     for (const supplierType of supplierTypes) {
@@ -78,11 +90,7 @@ export const getRecommendations = asyncHandler(async (req, res) => {
     const recommendations = {
         products: Array.from(recommendedProducts),
         suppliers: Array.from(supplierRatings.values()).map(supplier => ({
-            ...supplier,
-            // Calculamos el rating promedio de las categorías
-            rating: supplier.categories.reduce((acc, cat) => acc + cat.rating, 0) / supplier.categories.length,
-            // Unimos los nombres de las categorías y sus ratings en la descripción
-            description: supplier.categories.map(cat => `${cat.name}: ${cat.rating} stars`).join(', ')
+            ...supplier
         }))
     };
 

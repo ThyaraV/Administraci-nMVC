@@ -46,7 +46,6 @@ const SupplierListScreen = () => {
           </Button>
         </Col>
       </Row>
-
       {loadingCreate && <Loader />}
       {loadingDelete && <Loader />}
       {isLoading ? <Loader /> : error ? (
@@ -61,7 +60,8 @@ const SupplierListScreen = () => {
                 <th>Name</th>
                 <th>Price Range</th>
                 <th>Ratings</th>
-                <th>Description</th>
+                <th>Image</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -72,7 +72,9 @@ const SupplierListScreen = () => {
                   <td>{supplier.name}</td>
                   <td>{supplier.priceRange}</td>
                   <td>{supplier.ratings}</td>
-                  <td>{supplier.description}</td>
+                  <td>
+                    <img src={supplier.image} alt={supplier.name} style={{ maxWidth: '50px' }} />
+                  </td>
                   <td>
                     <LinkContainer to={`/admin/supplier/${supplier._id}/edit`}>
                       <Button variant='light' className='btn-sm mx-2'>
