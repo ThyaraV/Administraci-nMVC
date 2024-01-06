@@ -2,6 +2,7 @@
 
 Presentación del core:
 https://www.youtube.com/watch?v=uOphTIbTB5Y
+
 Defensa del core: https:
 //www.youtube.com/watch?v=5Lu2vP8Q-yE
 
