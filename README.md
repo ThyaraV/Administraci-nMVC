@@ -97,5 +97,6 @@ El diagrama de actividades representa el flujo de procesos para la gestión de p
 https://core-plpd.onrender.com
 
 User: admin@email.com
+
 Password: 123456
 
