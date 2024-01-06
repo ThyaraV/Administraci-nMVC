@@ -18,7 +18,7 @@ const UserListScreen = () => {
                 toast.success('User deleted');
                 refetch();
             }catch(err){
-                toast.error(err?.data?.Message || err.error);
+                toast.error(err?.data?.Message || (typeof err.error === 'object' ? JSON.stringify(err.error) : err.error));
             }
         }
     }
@@ -28,7 +28,7 @@ const UserListScreen = () => {
     <h1>Users</h1>
     {loadingDelete && <Loader/>}
     {isLoading ? <Loader/> : error ? <Message variant='danger'>
-        {error}
+        {error.message || "An error occurred"}
     </Message>:(
         <>
             <Table stripped hover responsive className='table-sm'>

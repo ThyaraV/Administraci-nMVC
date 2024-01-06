@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import {Badge,Navbar,Nav,Container, NavDropdown} from 'react-bootstrap'
-import {FaShoppingCart,FaUser,FaListUl } from 'react-icons/fa';
+import {FaShoppingCart,FaUser,FaListUl,FaAward} from 'react-icons/fa';
 import logo from "../assets/logo.png";
 import {LinkContainer} from 'react-router-bootstrap';
 import { useSelector,useDispatch} from 'react-redux';
@@ -46,6 +46,10 @@ const Header = () => {
                         <Nav.Link><FaListUl/>Filter
                         </Nav.Link>
                         </LinkContainer>
+                        <LinkContainer to='/recomendation'>
+                        <Nav.Link><FaAward />Recomendation
+                        </Nav.Link>
+                        </LinkContainer>
                         <LinkContainer to='/cart'>
                         <Nav.Link><FaShoppingCart/>Cart
                                {
@@ -71,12 +75,25 @@ const Header = () => {
                             </LinkContainer>
                         )}
                         {userInfo && userInfo.isAdmin &&(
-                            <NavDropdown title="Admin" id='adminmenu'>
+                            
+                        <NavDropdown title="Admin" id='adminmenu'>
+                            <LinkContainer to='/admin/orderlist'>
+                                <NavDropdown.Item>Orders</NavDropdown.Item>
+                            </LinkContainer>    
                             <LinkContainer to='/admin/productlist'>
                                 <NavDropdown.Item>Products</NavDropdown.Item>
                             </LinkContainer>
                             <LinkContainer to='/admin/userlist'>
                                 <NavDropdown.Item>Users</NavDropdown.Item>
+                            </LinkContainer>
+                            <LinkContainer to='/admin/servicelist'>
+                                <NavDropdown.Item>Services</NavDropdown.Item>
+                            </LinkContainer>
+                            <LinkContainer to='/admin/suppliertypelist'>
+                                <NavDropdown.Item>SupplierTypes</NavDropdown.Item>
+                            </LinkContainer>
+                            <LinkContainer to='/admin/supplierlist'>
+                                <NavDropdown.Item>Supplier</NavDropdown.Item>
                             </LinkContainer>
                             
                         </NavDropdown>

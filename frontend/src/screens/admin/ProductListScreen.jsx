@@ -18,7 +18,7 @@ const ProductListScreen = () => {
                 toast.success('Product deleted');
                 refetch();
             }catch(err){
-                toast.error(err?.data?.Message || err.error);
+                toast.error(err?.data?.Message || (typeof err.error === 'object' ? JSON.stringify(err.error) : err.error));
             }
         }
 
@@ -30,7 +30,7 @@ const ProductListScreen = () => {
                 await createProduct();
                 refetch();
             }catch(err){
-                toast.error(err?.data?.Message || err.error);
+                toast.error(err?.data?.Message || (typeof err.error === 'object' ? JSON.stringify(err.error) : err.error));
             }
         }
     }
@@ -50,7 +50,7 @@ const ProductListScreen = () => {
     {loadingCreate && <Loader/>}
     {loadingDelete && <Loader/>}
     {isLoading ? <Loader/> : error ? <Message variant='danger'>
-        {error}
+        {error.message || "An error occurred"}
     </Message>:(
         <>
             <Table stripped hover responsive className='table-sm'>
@@ -59,8 +59,10 @@ const ProductListScreen = () => {
                         <th>ID</th>
                         <th>NAME</th>
                         <th>PRICE</th>
-                        <th>CATEGORY</th>
-                        <th>BRAND</th>
+                        {/*<th>CATEGORY</th>*/}
+                        {/*<th>BRAND</th>*/}
+                        <th>SERVICE</th>
+                        <th>SUPPLIER TYPE</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -69,8 +71,10 @@ const ProductListScreen = () => {
                             <td>{product._id}</td>
                             <td>{product.name}</td>
                             <td>{product.price}</td>
-                            <td>{product.category}</td>
-                            <td>{product.brand}</td>
+                            {/*<td>{product.category}</td>*/}
+                            {/*<td>{product.brand}</td>*/}
+                            <td>{product.service?.type || 'N/A'}</td> {/* Mostrar el tipo de servicio */}
+                            <td>{product.supplierType?.category || 'N/A'}</td> {/* Mostrar la categoría del proveedor */}
                             <td>
                                 <LinkContainer to={`/admin/product/${product._id}/edit`}>
                                     <Button variant='light' className='btn-sm mx-2'>
@@ -88,10 +92,7 @@ const ProductListScreen = () => {
             </Table>
         </>
 
-    )}
-    
-    
-    
+    )}   
     </>
 }
 
