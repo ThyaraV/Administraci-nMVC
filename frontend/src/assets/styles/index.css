@@ -179,4 +179,19 @@ table th {
 /* Puedes añadir más estilos según sea necesario */
 
 
+.supplier-card {
+  max-width: 300px; /* Ajusta este valor según tus necesidades */
+  margin: auto;
+}
+
+.supplier-card-image {
+  max-height: 200px; /* Altura máxima para la imagen */
+  object-fit: cover; /* Asegura que la imagen cubra completamente el espacio asignado */
+}
+
+.supplier-card-description {
+  min-height: 100px; /* Asegura un mínimo de altura para la descripción */
+  overflow: hidden; /* Oculta el texto que exceda el espacio */
+  text-overflow: ellipsis; /* Añade puntos suspensivos si el texto es demasiado largo */
+}
 

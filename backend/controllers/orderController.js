@@ -1,5 +1,6 @@
 import asyncHandler from "../middleware/asyncHandler.js";
 import Order from '../models/orderModel.js';
+import Supplier from "../models/supplierModel.js";
 
 //@desc Create new order
 //@route POST/api/orders
@@ -142,6 +143,20 @@ const analyzeUserPreferences = async (userId) => {
     return userPreferences;
 };
 
+const getTopRated = asyncHandler(async (req, res) => {
+    try {
+        // Obtener proveedores con calificaciones mayores o iguales a 7
+        const topRatedSuppliers = await Supplier.find({ ratings: { $gte: 7 } })
+            .populate('supplierType', 'category') // Suponiendo que quieras también la categoría del tipo de proveedor
+            .sort({ ratings: -1 }); // Ordenar por calificaciones de mayor a menor
+
+        res.status(200).json(topRatedSuppliers);
+    } catch (error) {
+        res.status(500).json({ message: error.message || 'Error al obtener los proveedores mejor calificados' });
+    }
+});
+
+
 const getMyOrdersWithPreferences = asyncHandler(async(req, res) => {
     const orders = await Order.find({ user: req.user._id });
     if (orders) {
@@ -151,6 +166,99 @@ const getMyOrdersWithPreferences = asyncHandler(async(req, res) => {
         res.status(404).send('No orders found');
     }
 });
+const getTopSellingSuppliers = asyncHandler(async (req, res) => {
+    const { startDate, endDate } = req.query;
+
+    const orders = await Order.find({
+        createdAt: { $gte: new Date(startDate), $lte: new Date(endDate) }
+    }).populate({
+        path: 'orderItems.product',
+        populate: { path: 'supplierType' }
+    });
+
+    let supplierSales = {};
+
+    orders.forEach(order => {
+        order.orderItems.forEach(item => {
+            const supplierId = item.product.supplierType?._id.toString();
+            if (supplierId) {
+                if (!supplierSales[supplierId]) {
+                    supplierSales[supplierId] = {
+                        totalSales: 0,
+                        supplierName: item.product.supplierType.name
+                    };
+                }
+                supplierSales[supplierId].totalSales += item.price * item.qty;
+            }
+        });
+    });
+
+    const sortedSuppliers = Object.entries(supplierSales).sort((a, b) => b[1].totalSales - a[1].totalSales);
+
+    res.json(sortedSuppliers.map(([supplierId, data]) => ({ supplierId, ...data })));
+});
+
+
+const getTopSuppliersInRange = asyncHandler(async (req, res) => {
+    const { startDate, endDate } = req.query;
+
+    // Verifica si ambas fechas son válidas o no están definidas
+    const isValidStartDate = startDate ? !isNaN(new Date(startDate).getTime()) : true;
+    const isValidEndDate = endDate ? !isNaN(new Date(endDate).getTime()) : true;
+
+    if (!isValidStartDate || !isValidEndDate) {
+        res.status(400).json({ message: "Invalid date format" });
+        return;
+    }
+    
+    const gteDate = startDate ? new Date(startDate) : new Date();
+    const lteDate = endDate ? new Date(endDate) : new Date();
+
+    const orders = await Order.find({
+        createdAt: { $gte: gteDate, $lte: lteDate }
+    }).populate({
+        path: 'orderItems.product',
+        populate: { 
+            path: 'supplierType',
+            model: 'SupplierType'
+        }
+    });
+
+    let supplierPriceRanges = {};
+
+    orders.forEach(order => {
+        order.orderItems.forEach(item => {
+            const supplierId = item.product.supplierType?._id.toString();
+            const supplierCategory = item.product.supplierType?.category;
+            const supplierRating = item.product.supplierType?.averageRating;
+            const itemPrice = item.price;
+            if (supplierId) {
+                if (!supplierPriceRanges[supplierId]) {
+                    supplierPriceRanges[supplierId] = { 
+                        category: supplierCategory, 
+                        rating: supplierRating, 
+                        priceRange: [itemPrice, itemPrice] 
+                    };
+                } else {
+                    const currentRange = supplierPriceRanges[supplierId].priceRange;
+                    if (itemPrice < currentRange[0]) {
+                        currentRange[0] = itemPrice;
+                    }
+                    if (itemPrice > currentRange[1]) {
+                        currentRange[1] = itemPrice;
+                    }
+                }
+            }
+        });
+    });
+
+    const sortedSuppliers = Object.values(supplierPriceRanges).sort((a, b) => b.rating - a.rating);
+
+    res.json(sortedSuppliers);
+});
+
+
+
 
 
 export{
@@ -158,7 +266,10 @@ export{
     getMyOrders,
     getOrderById,
     updateOrderToPaid,
+    getTopRated,
     updateOrderToDelivered,
     getOrders,
-    getMyOrdersWithPreferences
+    getMyOrdersWithPreferences,
+    getTopSuppliersInRange,
+    getTopSellingSuppliers
 };

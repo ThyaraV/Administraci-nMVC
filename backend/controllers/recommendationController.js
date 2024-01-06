@@ -53,15 +53,6 @@ export const getRecommendations = asyncHandler(async (req, res) => {
     filteredProductsInLikedCategories.forEach(product => {
         recommendedProducts.add(product);
     });
-    /*const filteredProductsInLikedCategories = productsInLikedCategories.filter(product => {
-        const totalRating = product.reviews.reduce((acc, review) => acc + review.rating, 0);
-        const averageRating = product.reviews.length > 0 ? totalRating / product.reviews.length : 0;
-        return averageRating >= 3;
-    });
-
-    filteredProductsInLikedCategories.forEach(product => {
-        recommendedProducts.add(product);
-    });*/
 
     // Buscar proveedores asociados con los SupplierTypes encontrados y agrupar sus calificaciones
     for (const supplierType of supplierTypes) {
@@ -74,10 +65,8 @@ export const getRecommendations = asyncHandler(async (req, res) => {
             const supplierId = supplier._id.toString();
             const existingSupplier = supplierRatings.get(supplierId);
             if (existingSupplier) {
-                // Si el proveedor ya existe, agregamos la nueva categoría con su rating
                 existingSupplier.categories.push({ name: supplierType.category, rating: supplier.ratings });
             } else {
-                // Si es la primera vez que encontramos al proveedor, lo agregamos al mapa
                 supplierRatings.set(supplierId, {
                     ...supplier.toObject(),
                     categories: [{ name: supplierType.category, rating: supplier.ratings }]

@@ -10,6 +10,12 @@ export const ordersApiSlice=apiSlice.injectEndpoints({
                 body:{...order}
             })
         }),
+        getTopRatedSuppliers: builder.query({
+            query: () => ({
+                url: `${ORDERS_URL}/top-rated-suppliers`,
+            }),
+            keepUnusedDataFor: 5,
+        }),
         getOrderDetails:builder.query({
             query:(orderId)=>({
                 url:`${ORDERS_URL}/${orderId}`,
@@ -54,11 +60,19 @@ export const ordersApiSlice=apiSlice.injectEndpoints({
             }),
             keepUnusedDataFor: 5,
         }),
+        getTopSuppliersInRange: builder.query({
+            query: (dateRange) => ({
+                url: `${ORDERS_URL}/top-suppliers`,
+                params: dateRange,
+            }),
+            keepUnusedDataFor: 5
+        }),
     })
 })
 
 export const {useCreateOrderMutation,useGetOrderDetailsQuery,
-    usePayOrderMutation,useGetOrdersQuery,useDeliverOrderMutation,
-    useGetPayPalClientIdQuery,useGetMyOrdersQuery,useGetUserPreferencesQuery}=ordersApiSlice;
+    usePayOrderMutation,useGetTopRatedSuppliersQuery,useGetOrdersQuery,useDeliverOrderMutation,
+    useGetPayPalClientIdQuery,useGetMyOrdersQuery,useGetUserPreferencesQuery,
+    useGetTopSuppliersInRangeQuery}=ordersApiSlice;
 
     
