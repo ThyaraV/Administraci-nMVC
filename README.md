@@ -1,6 +1,10 @@
 # Link Youtube
 
-https://www.youtube.com/watch?v=bXejY22llBI
+Presentación del core:
+https://www.youtube.com/watch?v=uOphTIbTB5Y
+Defensa del core: https:
+//www.youtube.com/watch?v=5Lu2vP8Q-yE
+
 
 # Sistema de Administración de Eventos
 
@@ -78,7 +82,19 @@ Las flechas entre los componentes indican las interacciones y dependencias entre
 
 En resumen, el diagrama representa cómo el administrador interactúa con las diversas capas de la aplicación, desde la interfaz de usuario hasta la lógica del servidor y la base de datos, para gestionar eventos y usuarios de manera eficiente.
 
-# Link del deploy
-https://administracionmvc.vercel.app/login
+## Diagrama de actividades del core
+![image](https://github.com/ThyaraV/AdministracionMVC/assets/96449161/dcdc1b4d-2d9f-4c2e-a083-36cdf1972308)
 
+El diagrama de actividades ilustra el flujo de procesos del controlador de recomendaciones en tu aplicación. Comienza con la recepción de una solicitud HTTP y la extracción del ID de usuario de la solicitud. Luego, inicializa varias estructuras de datos. El flujo se divide en paralelo para realizar múltiples tareas: obtener pedidos del usuario, tipos de proveedores, productos en categorías que le gustaron y calificaciones de proveedores. Después de estas tareas, el sistema analiza los pedidos para identificar categorías preferidas, filtra los productos en función de sus calificaciones y agrega las calificaciones de los proveedores. Finalmente, el controlador prepara las recomendaciones y envía una respuesta en formato JSON. Este flujo destaca cómo se manejan múltiples aspectos de la generación de recomendaciones en tu sistema.
+
+## Diagrama de actividades de la defensa 
+![image](https://github.com/ThyaraV/AdministracionMVC/assets/96449161/06e80fa2-3293-4acc-8f8e-1daae4e62b9a)
+
+El diagrama de actividades representa el flujo de procesos para la gestión de pedidos en tu sistema. Comienza con la recepción de una solicitud de pedido, seguida de su validación. Si la solicitud es válida, el flujo se divide en varias ramas paralelas para manejar diferentes funciones: procesar un nuevo pedido y responder con los detalles del pedido o un error; obtener un pedido por ID y responder con los detalles del pedido o un error si no se encuentra; obtener los pedidos de un usuario y responder con ellos; actualizar un pedido a pagado y responder con los detalles actualizados o un error de actualización; actualizar un pedido a entregado y responder con la confirmación de la entrega o un error; obtener todos los pedidos y responder con ellos; analizar las preferencias del usuario y responder con ellas; obtener proveedores con las mejores calificaciones y responder con ellos; obtener los proveedores más vendidos y responder con los datos de ventas; y obtener los mejores proveedores en un rango específico, respondiendo con los datos del rango de proveedores. Si la solicitud inicial no es válida, el sistema responde con un error de solicitud inválida. Este diagrama destaca cómo se manejan diversas operaciones relacionadas con los pedidos en el sistema.
+
+# Link del deploy
+https://core-plpd.onrender.com
+
+User: admin@email.com
+Password: 123456
 
