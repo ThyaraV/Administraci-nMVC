@@ -13,9 +13,15 @@ import supplierTypeRoutes from './routes/supplierTypeRoutes.js';
 import supplierRoutes from './routes/supplierRoutes.js';
 import orderRoutes from './routes/orderRoutes.js'
 import recommendationRoutes from './routes/recommendationRoutes.js';
-
+import notificationRoutes from'./routes/apiRoutes.js';
 const port=process.env.PORT || 5000;
 
+//fabs new items
+const http = require('http');
+const socketIo = require('socket.io');
+
+const server = http.createServer(app);
+const io = socketIo(server); // vincular socket.io al servidor
 
 connectDB();
 
@@ -38,6 +44,7 @@ app.use('/api/users',userRoutes);
 app.use('/api/orders',orderRoutes);
 app.use('/api/upload',uploadRoutes);
 app.use('/api/recommendations', recommendationRoutes);
+app.use('/api/notifications', notificationRoutes);
 app.get('/api/config/paypal',(req,res)=>res.send({clientId:process.env.PAYPAL_CLIENT_ID}));
 
 

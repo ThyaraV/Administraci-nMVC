@@ -1,6 +1,7 @@
 import asyncHandler from "../middleware/asyncHandler.js";
 import Order from '../models/orderModel.js';
 import Supplier from "../models/supplierModel.js";
+import Notification from '../models/notificationModel';
 
 //@desc Create new order
 //@route POST/api/orders
@@ -74,6 +75,17 @@ const updateOrderToPaid=asyncHandler(async(req,res)=>{
         };
 
         const updatedOrder = await order.save();
+        //! nueva validacion
+        if (updatedOrder.isPaid) {
+            const notification = new Notification({
+              userId: order.user,
+              message: `Your order ${updatedOrder._id} has been marked as paid.`,
+              read: false,
+              date: new Date(), // o `order.paidAt` si prefieres la fecha de pago
+            });
+
+            await notification.save();
+          }
 
         res.statue(200).json(updatedOrder);
     }else{
@@ -111,9 +123,9 @@ const getOrders=asyncHandler(async(req,res)=>{
 const analyzeUserPreferences = async (userId) => {
     const orders = await Order.find({ user: userId }).populate({
         path: 'orderItems.product',
-        populate: { 
-            path: 'service supplierType', 
-            model: 'Service SupplierType' 
+        populate: {
+            path: 'service supplierType',
+            model: 'Service SupplierType'
         }
     });
 
@@ -210,7 +222,7 @@ const getTopSuppliersInRange = asyncHandler(async (req, res) => {
         res.status(400).json({ message: "Invalid date format" });
         return;
     }
-    
+
     const gteDate = startDate ? new Date(startDate) : new Date();
     const lteDate = endDate ? new Date(endDate) : new Date();
 
@@ -218,7 +230,7 @@ const getTopSuppliersInRange = asyncHandler(async (req, res) => {
         createdAt: { $gte: gteDate, $lte: lteDate }
     }).populate({
         path: 'orderItems.product',
-        populate: { 
+        populate: {
             path: 'supplierType',
             model: 'SupplierType'
         }
@@ -234,10 +246,10 @@ const getTopSuppliersInRange = asyncHandler(async (req, res) => {
             const itemPrice = item.price;
             if (supplierId) {
                 if (!supplierPriceRanges[supplierId]) {
-                    supplierPriceRanges[supplierId] = { 
-                        category: supplierCategory, 
-                        rating: supplierRating, 
-                        priceRange: [itemPrice, itemPrice] 
+                    supplierPriceRanges[supplierId] = {
+                        category: supplierCategory,
+                        rating: supplierRating,
+                        priceRange: [itemPrice, itemPrice]
                     };
                 } else {
                     const currentRange = supplierPriceRanges[supplierId].priceRange;
