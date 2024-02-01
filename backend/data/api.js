@@ -1,5 +1,10 @@
-const DB = require('./apidb.json');
+import fs from 'fs';
+import path from 'path';
 
-const getNotifications = () => {
-    return DB.apidb;
+function getEmailConfig() {
+  const jsonData = fs.readFileSync(path.join(__dirname, 'apidb.json'));
+  return JSON.parse(jsonData).email;
 }
+
+export { getEmailConfig };
+

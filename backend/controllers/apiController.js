@@ -1,55 +1,40 @@
-import Notification from '../models/notificationModel';
+import nodemailer from 'nodemailer';
+import { getEmailConfig } from '../data/api.js';
 
-// Función para enviar (crear) y guardar una notificación
-export const sendNotification = async (userId, message, io) => {
+const transporter = nodemailer.createTransport({
+  host: process.env.EMAIL_HOST,
+  port: 465,
+  secure: true,
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
+
+async function sendEmail(to, orderNumber) {
   try {
-    const notification = new Notification({
-      userId,
-      message
+    const emailConfig = getEmailConfig();
+    const subject = emailConfig.subject.replace("#{orderNumber}", orderNumber);
+    const text = emailConfig.text.replace("#{orderNumber}", orderNumber);
+    const html = emailConfig.html.replace("#{orderNumber}", orderNumber);
+    const info = await transporter.sendMail({
+      from: `"Fabs Liria 👻" <${process.env.EMAIL_USER}>`,
+      to: to,
+      subject: subject,
+      text: text,
+      html: html,
     });
 
-    const savedNotification = await notification.save();
-    io.to(userId.toString()).emit('notification', savedNotification);
+    console.log("Message sent: %s", info.messageId);
+    return { messageId: info.messageId }; // Devuelve información relevante
   } catch (error) {
-    console.error('Error sending notification:', error);
+    console.error(error);
+    throw error; // Lanza el error para manejarlo en el controlador
   }
-};
+}
 
-// Función para obtener las notificaciones de un usuario
-export const getNotifications = async (req, res) => {
-  try {
-    const userId = req.params.userId;
-    const notifications = await Notification.find({ userId }).sort({ date: -1 });
+export { sendEmail };
 
-    res.json(notifications);
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching notifications' });
-  }
-};
 
-// Función para marcar una notificación como leída
-export const markAsRead = async (req, res) => {
-  try {
-    const notificationId = req.params.id;
-    const notification = await Notification.findById(notificationId);
-
-    if (notification) {
-      notification.read = true;
-      await notification.save();
-      res.json({ message: 'Notification marked as read' });
-    } else {
-      res.status(404).json({ message: 'Notification not found' });
-    }
-  } catch (error) {
-    res.status(500).json({ message: 'Error updating notification' });
-  }
-};
-
-// Exportar las funciones para usarlas en tus rutas
-export default {
-  sendNotification,
-  getNotifications,
-  markAsRead
-};
 
 

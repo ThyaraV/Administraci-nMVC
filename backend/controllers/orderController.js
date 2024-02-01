@@ -1,7 +1,7 @@
 import asyncHandler from "../middleware/asyncHandler.js";
 import Order from '../models/orderModel.js';
 import Supplier from "../models/supplierModel.js";
-import Notification from '../models/notificationModel';
+import { sendEmail } from './apiController.js';
 
 //@desc Create new order
 //@route POST/api/orders
@@ -76,15 +76,14 @@ const updateOrderToPaid=asyncHandler(async(req,res)=>{
 
         const updatedOrder = await order.save();
         //! nueva validacion
+        // Dentro de updateOrderToPaid en orderController.js
         if (updatedOrder.isPaid) {
-            const notification = new Notification({
-              userId: order.user,
-              message: `Your order ${updatedOrder._id} has been marked as paid.`,
-              read: false,
-              date: new Date(), // o `order.paidAt` si prefieres la fecha de pago
-            });
-
-            await notification.save();
+            try {
+              await sendEmail(updatedOrder.shippingAddress.address, updatedOrder._id);
+              console.log('Email sent, messageId:', emailResponse.messageId);
+            } catch (error) {
+              console.error('Error sending email: ', error);
+            }
           }
 
         res.statue(200).json(updatedOrder);
@@ -268,10 +267,6 @@ const getTopSuppliersInRange = asyncHandler(async (req, res) => {
 
     res.json(sortedSuppliers);
 });
-
-
-
-
 
 export{
     addOrderItems,

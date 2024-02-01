@@ -13,29 +13,18 @@ import supplierTypeRoutes from './routes/supplierTypeRoutes.js';
 import supplierRoutes from './routes/supplierRoutes.js';
 import orderRoutes from './routes/orderRoutes.js'
 import recommendationRoutes from './routes/recommendationRoutes.js';
-import notificationRoutes from'./routes/apiRoutes.js';
+import apiRoutes from './routes/apiRoutes.js';
+
 const port=process.env.PORT || 5000;
-
-//fabs new items
-const http = require('http');
-const socketIo = require('socket.io');
-
-const server = http.createServer(app);
-const io = socketIo(server); // vincular socket.io al servidor
-
 connectDB();
-
 const app=express();
 
 //Body parser middleware
-
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
 //Cookie de middleware
 app.use(cookieParser());
-
-
 app.use('/api/products',productRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api/supplierTypes', supplierTypeRoutes);
@@ -44,10 +33,8 @@ app.use('/api/users',userRoutes);
 app.use('/api/orders',orderRoutes);
 app.use('/api/upload',uploadRoutes);
 app.use('/api/recommendations', recommendationRoutes);
-app.use('/api/notifications', notificationRoutes);
 app.get('/api/config/paypal',(req,res)=>res.send({clientId:process.env.PAYPAL_CLIENT_ID}));
-
-
+app.use('/api/notifications', apiRoutes);
 
 const __dirname=path.resolve();
 app.use('/uploads',express.static(path.join(__dirname,'/uploads')));
@@ -62,9 +49,7 @@ if(process.env.NODE_ENV === 'production'){
     res.end('API is running....'));
 }
 
-
 app.use(notFound);
 app.use(errorHandler);
-
 
 app.listen(port,()=>console.log(`Server running on port ${port}`));

@@ -14,9 +14,13 @@ const protect=asyncHandler(async(req,res,next)=>{
             req.user=await User.findById(decoded.userId).select('-password');
             next();
         }catch(error){
-            console.log(error);
-            res.status(401);
-            throw new Error('No authorized, no token');
+            if (error.name === 'TokenExpiredError') {
+                throw new Error('Token expired');
+            } else if (error.name === 'JsonWebTokenError') {
+                throw new Error('Token is invalid');
+            } else {
+                throw new Error('Not authorized, no token');
+            }
 
         }
     }else{
