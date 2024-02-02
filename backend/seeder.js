@@ -12,10 +12,11 @@ import Service from "./models/servicesModel.js";
 import SupplierType from "./models/supplierTypeModel.js";
 import Supplier from "./models/supplierModel.js";
 import Order from "./models/orderModel.js";
-import connectDB from "./config/db.js";
+//import connectDB from "./config/db.js";
+import { dbInstance } from "./config/db.js";
 
 dotenv.config();
-connectDB();
+dbInstance.connect();
 
 const importData = async () => {
     try {
